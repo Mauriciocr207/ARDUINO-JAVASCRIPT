@@ -204,7 +204,7 @@ input {
   width: 40px;
 }
 
-.conect {
+.connect {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -216,9 +216,19 @@ input {
     left: 0;
     right: 0;
     margin: auto;
-    background-color: #00000020;
+    background-color: #0000002e;
+    color: white; 
     border-radius: 50%;
     font-size: 25px;
     backdrop-filter: blur(15px);
-    transition: all 100ms ease-in;
+    transition: all 100ms ease-in, background-color .3s ease-in, color .3s ease;
+    cursor: pointer;
+}
+
+.connect-acept{
+  background-color: rgb(79, 180, 79);
+}
+
+.connect-denied{
+  background-color: rgb(207, 0, 0);
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node serialJS/serial.js"
+    "start": "node serial.js"
   },
   "keywords": [],
   "author": "",

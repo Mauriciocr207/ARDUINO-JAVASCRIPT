@@ -1,19 +1,16 @@
 // Conexión Serial
-const {SerialPort} = require('serialport');
+const {SerialPort, SerialPortMock} = require('serialport');
 const port = new SerialPort(
     {
         path: 'COM3',
-        baudRate: 9600
+        baudRate: 9600,
+        autoOpen: false
     }
 );
 
-port.on('open', () => console.log('Open Serial Port cabronesss'));
-
-port.on('err', err => console.log(err.message));
-
-
 //Express - Creando el servidor
 const express = require('express');
+const { callbackify } = require('util');
 const app = express();
 
 // Creacion del socket 
@@ -31,26 +28,56 @@ server.listen(3000, () => {
     console.log("Server running...");
 })
 
+// Eventos del puerto
+port.on('open', () => {
+    console.log('Open Serial Port cabronesss');
+});
 
+port.on('err', () => {console.log('error al abrir el puerto')}); 
 
-// Envío y recepción de datos
-//     Recepción de datos del arduino
 port.on('data', data => {
     // Se reciben datos al puerto y se convierten.
     let dataString = data.toString();
     // Se emiten al cliente
-    io.emit('arduino:data', {value: dataString});
+    io.emit('arduino:data', {value: parseInt(dataString)});
     console.log(dataString);
 });
+
+
+// Envío y recepción de datos
     // Conexión de socket
 io.on('connection', socket => { 
     console.log('A new socket conected:' + socket.id);
+    //Creación del puerto
 
+    // Emisor
     // Se envía mensaje desde el navegador -> Servidor recibe mensaje del navegador.
     socket.on('message', data => {
         // Se envía 
         socket.broadcast.emit('message', data);
         // Se escribe mensaje en el puerto serial hacia el arduino
         port.write(Buffer.from(data));
+    });
+
+    // Receptor
+    
+
+    //Conexión del puerto
+    socket.on('portConnection', data => {
+        if(!data) {
+            port.open(function (err) { 
+                if(err) {
+                    socket.emit('arduinoDisconnected', true);
+                    console.log('CONECTA ARDUINO');
+                }
+            });
+        } else {
+            port.close(function (err) { 
+                if(err) {
+                    socket.emit('arduinoDisconnected', true);
+                    console.log('CONECTA ARDUINO');
+                }
+            })
+        }
     });
 });
