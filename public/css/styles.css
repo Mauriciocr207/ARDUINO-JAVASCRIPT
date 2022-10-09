@@ -1,18 +1,25 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+:root {
+  --globalPalette-1: #f6f6f6;
+  --globalPalette-2: black;
+  --globalPalette-3: #30cfd0;
+  --globalPalette-4: #330867;
+  --globalPalette-5: #eee;
+}
 * {
   box-sizing: border-box;
 }
 body {
-  background: #f6f6f6;
+  background: var(--globalPalette-1);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-family: 'Montserrat', sans-serif;
   min-height: 100vh;
-  /* margin: -20px 0 50px; */
-  padding: 0;
-  margin: 0;
+  display: flex;
+  
 }
 h1 {
   font-weight: bold;
@@ -37,23 +44,25 @@ a {
   text-decoration: none;
   margin: 15px 0;
 }
+
+
+
 button {
   border-radius: 20px;
-  border: 1px solid #30cfd0;
-  background-color: #30cfd0;
-  color: #fff;
+  border: 1px solid var(--globalPalette-3);
+  background-color: var(--globalPalette-3);
+  color: var(--globalPalette-1);
   font-size: 12px;
   font-weight: bold;
   padding: 12px 45px;
+  margin: 5px 0;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: transform 80ms ease-in, all .4s ease-in;
-  
+  transition: transform 80ms ease-in, background-color .3s ease-in-out;
 }
 button:hover, button.ghost:hover {
-    color: white;
-    background-color: black;
-    cursor: pointer;
+  background-color: black;
+  cursor: pointer;
 }
 button:active {
   transform: scale(0.95);
@@ -63,10 +72,11 @@ button:focus {
 }
 button.ghost {
   background-color: transparent;
-  border-color: #fff;
+  border-color: var(--globalPalette-1);
 }
+
 .form {
-  background-color: #fff;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,24 +85,22 @@ button.ghost {
   height: 100%;
   text-align: center;
 }
-input {
-  background-color: #eee;
+.input {
+  background-color: var(--globalPalette-5);
   border: none;
   padding: 12px 15px;
-  margin: 20px 0;
+  margin: 8px 0;
   width: 100%;
 }
 .container {
-  background-color: #fff;
-  border-radius: 20px;
+  background-color: white;
+  border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
   overflow: hidden;
-  width: 1000px;
+  width: 768px;
   max-width: 100%;
-  min-height: 680px;
-  display: flex;
-  align-items: center;
+  min-height: 480px;
 }
 .form-container {
   position: absolute;
@@ -146,13 +154,13 @@ input {
   transform: translateX(-100%);
 }
 .overlay {
-  background: #30cfd0;
-  background: -webkit-linear-gradient(to right, #30cfd0, #330867);
-  background: linear-gradient(to right, #30cfd0, #330867);
+  background: var(--globalPalette-3);
+  background: -webkit-linear-gradient(to right, var(--globalPalette-3), var(--globalPalette-4));
+  background: linear-gradient(to right, var(--globalPalette-3), var(--globalPalette-4));
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
-  color: #fff;
+  color: var(--globalPalette-1);
   position: relative;
   left: -100%;
   height: 100%;
@@ -194,7 +202,7 @@ input {
   margin: 20px 0;
 }
 .social-container a {
-  border: 1px solid #ddd;
+  border: 1px solid var(--globalPalette-5);
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
@@ -204,31 +212,156 @@ input {
   width: 40px;
 }
 
+
+/* Inicio de CSS extra */
+
 .connect {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    position: absolute;
-    z-index: 10000;
-    top: 30px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    background-color: #0000002e;
-    color: white; 
-    border-radius: 50%;
-    font-size: 25px;
-    backdrop-filter: blur(15px);
-    transition: all 100ms ease-in, background-color .3s ease-in, color .3s ease;
-    cursor: pointer;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  position: absolute;
+  backdrop-filter: blur(15px);
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #0000001d;
+  color: white;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: px;
+  transition: background .4s ease-in-out;
+  cursor: pointer;
 }
 
-.connect-acept{
-  background-color: rgb(79, 180, 79);
+.connect-acept {
+  background-color: rgb(35, 145, 35);
 }
 
-.connect-denied{
-  background-color: rgb(207, 0, 0);
+.connect-denied {
+  background-color: rgb(172, 15, 15);
+}
+
+.input {
+  outline: none;
+  position: relative;
+  z-index: 1000;
+  margin: 0;
+  background-color: transparent;
+}
+
+.inputContainer {
+  position: relative;
+  width: 100%;
+  background-color: var(--globalPalette-5);
+  padding: 0;
+  margin: 10px 0;
+  overflow-inline: hidden;
+}
+
+.inputContainer-lbl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 110%;
+  z-index: 50;
+  box-sizing: border-box;
+  border-bottom: 2px solid var(--globalPalette-3);
+}
+
+.text {
+  position: absolute;
+  left: 15px;
+  top: 12px;
+  font-size: 13px;
+  font: bolder;
+  color: rgb(138, 138, 138);
+}
+
+.inputContainer-lbl::after {
+  content: '';
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  bottom: -2px;
+  border-bottom: 2px solid white;
+  transform: translate(-100%);
+  
+}
+
+.inputContainer-lbl::before {
+  content: '';
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  bottom: -2px;
+  border-bottom: 2px solid white;
+  transform: translate(0);
+}
+
+.text, .inputContainer-lbl::after, .inputContainer-lbl::before {
+  transition: all .4s ease-in-out;
+}
+
+.inputContainer-lbl::after, .inputContainer-lbl::before {
+  transition: transform .3s ease;
+}
+
+.input:focus + .inputContainer-lbl::after, 
+.input:valid + .inputContainer-lbl::after {
+    transform: translate(-200%);
+}
+
+.input:focus + .inputContainer-lbl::before,
+.input:valid + .inputContainer-lbl::before {
+    transform: translate(+100%);
+}
+
+.input:focus + .inputContainer-lbl .text,
+.input:valid + .inputContainer-lbl .text {
+    color: var(--globalPalette-3);
+    transform: scale(.8) translate(-10px, -37px);
+    font-weight: bolder;
+}
+
+.overflowContainer {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+  margin-bottom: 7px;
+}
+
+textarea {
+  resize: none;
+}
+
+.marginTA{
+  padding-top: 18px;
+
+}
+
+.overflowContainer-TA {
+  margin: 0;
+}
+
+.errorArduinoConnection {
+  position: absolute;
+  z-index: 1000;
+  background-color: rgb(241, 25, 25);
+  color: white;
+  top: 50px;
+  padding: 8px;
+  border-radius: 13px;
+  opacity: 0;
+  transition: opacity .5s ease-in-out;
+}
+
+.errorArduinoConnection strong {
+  margin: 0;
+  font-size: 10px;
 }

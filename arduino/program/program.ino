@@ -13,24 +13,22 @@ void loop() {
   //Se lee el serial
   if(Serial.available()>0){
     cadena = Serial.readStringUntil('\n');
-    cadena = cadena.substring(0, cadena.length() - 1);
+    cadena = cadena.substring(0, cadena.length());
   }
 
-  
-  variable = cadena.toInt();
-  
-  if(variable != 0) {
-    digitalWrite(led, HIGH);
+  if(cadena != "") {
+    if(cadena == "H") {
+      digitalWrite(led, HIGH);
+    } 
+    else if(cadena == "L") {
+      digitalWrite(led, LOW);
+    }
     Serial.print("RECIBI DATOS: ");
-    Serial.println(variable);
+    Serial.println(cadena);
     delay(3000);
-    cadena = "0";
-  } else {
-    digitalWrite(led, LOW);
+    cadena = "";
   }
-
   Serial.println(counter);
   counter++;
   delay(1000);
-  
 }

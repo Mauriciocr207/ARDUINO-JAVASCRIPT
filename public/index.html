@@ -6,35 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login and SignUp Form - Navid Dev</title>
-
-    
+    <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
     <div class="container" id="container">
+        <!-- Botón de conexión con arduino -->
         <div class="connect" id="connect"><i class="fa-solid fa-wifi"></i></div>
 
-        <div class="form-container sign-in-container">
-            <div class="form">
-                <h1>Emisor</h1>
-                <div class="social-container">
-                    <a href="#" class="social">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="social">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                </div>
-                <span>Actúa como emisor de datos</span>
-                <input type="text" placeholder="Mensaje" id="text"/>
-                <button id="btn-Emisor">Enviar</button>
-            </div>
-        </div>
-
+        <!-- Receptor -->
         <div class="form-container sign-up-container">
             <div class="form">
                 <h1>Receptor</h1>
@@ -50,39 +31,94 @@
                     </a>
                 </div>
                 <span>Recibe los mensajes aquí</span>
-                <input type="text" placeholder="Mensaje" />
+
+                <!-- TextArea de mensaje recibido -->
+                <div class="overflowContainer overflowContainer-TA marginTA">
+                    <div class="inputContainer">
+                        <textarea class="input" id="textArea" cols="30" rows="4" required></textarea>
+                        <div class="inputContainer-lbl">
+                            <span class="text">Mensaje</span>
+                        </div>
+                    </div>
+                </div>
                 
+                <div class="overflowContainer overflowContainer-TA">
+                    <div class="inputContainer">
+                        <textarea class="input" id="textArea" cols="30" rows="4" required></textarea>
+                        <div class="inputContainer-lbl">
+                            <span class="text">Mensaje en binario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Emisor -->
+        <div class="form-container sign-in-container">
+            <div class="form">
+                <h1>Emisor</h1>
+                <div class="social-container">
+                    <a href="#" class="social">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+                <span>Envía un mensaje</span>
+
+
+                <!-- input del mensaje -->
+                <div class="overflowContainer">
+                    <div class="inputContainer">
+                        <input id="text" class="input" type="text" required />
+                        <div class="inputContainer-lbl">
+                            <span class="text">Mensaje</span>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <button id="emisorButton">Enviar</button>
             </div>
         </div>
 
+        <!-- Overlay -->
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>¿Prefieres ser emisor?</h1>
+                    <h1>¿Prefieres Emisor?</h1>
                     <p>
-                        Actuar como emisor te permite <strong>RECIBIR</strong> mensajes e interpretarlos
+                        Al ser emisor, puedes <strong>ENVIAR</strong> mensajes a hacia tu arduino
                     </p>
-                    <button class="ghost" id="signIn">Emisor</button>
+                    <button class="ghost" id="signIn">EMISOR</button>
                 </div>
 
                 <div class="overlay-panel overlay-right">
-                    <h1>¿Quieres actuar como receptor?</h1>
+                    <h1>¿Quieres ser Receptor?</h1>
                     <p>
-                        Actuar como receptor significa que tus datos son 
-                        <strong>ENVIADOS</strong> al arduino
+                        Al ser receptor puedes
+                        <strong>RECIBIR</strong> mensajes de tu arduino
                     </p>
-                    <button class="ghost" id="signUp" >RECEPTOR</button>
+                    <button class="ghost" id="signUp">RECEPTOR</button>
                 </div>
             </div>
         </div>
     </div>
+
+
     <script src="https://kit.fontawesome.com/d10d1e89d5.js" crossorigin="anonymous"></script>
-
     <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="scripts/script.js"></script>
     <script type="module" src="scripts/app.js"></script>
-    
 
-
+    <!-- Error en la conexión con arduino -->
+    <!-- <div class="errorArduinoConnection">
+        <strong>CONECTA TU ARDUINO</strong>
+    </div> -->
 </body>
 
 </html>

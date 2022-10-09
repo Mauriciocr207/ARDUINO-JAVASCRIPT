@@ -10,7 +10,6 @@ const port = new SerialPort(
 
 //Express - Creando el servidor
 const express = require('express');
-const { callbackify } = require('util');
 const app = express();
 
 // Creacion del socket 
@@ -28,47 +27,30 @@ server.listen(3000, () => {
     console.log("Server running...");
 })
 
-// Eventos del puerto
-port.on('open', () => {
-    console.log('Open Serial Port cabronesss');
-});
+
+// Eventos del puerto Open y error
+// port.on('open', () => {
+//     console.log('Open Serial Port cabronesss');
+// });
 
 port.on('err', () => {console.log('error al abrir el puerto')}); 
-
-port.on('data', data => {
-    // Se reciben datos al puerto y se convierten.
-    let dataString = data.toString();
-    // Se emiten al cliente
-    io.emit('arduino:data', {value: parseInt(dataString)});
-    console.log(dataString);
-});
 
 
 // Envío y recepción de datos
     // Conexión de socket
 io.on('connection', socket => { 
     console.log('A new socket conected:' + socket.id);
-    //Creación del puerto
-
-    // Emisor
-    // Se envía mensaje desde el navegador -> Servidor recibe mensaje del navegador.
-    socket.on('message', data => {
-        // Se envía 
-        socket.broadcast.emit('message', data);
-        // Se escribe mensaje en el puerto serial hacia el arduino
-        port.write(Buffer.from(data));
-    });
-
-    // Receptor
-    
 
     //Conexión del puerto
-    socket.on('portConnection', data => {
-        if(!data) {
+    socket.on('wantOpenPort', data => {
+        if(data) {
             port.open(function (err) { 
                 if(err) {
                     socket.emit('arduinoDisconnected', true);
                     console.log('CONECTA ARDUINO');
+                } else {
+                    socket.emit('openedPort', true);
+                    console.log('PUERTO ABIERTO');
                 }
             });
         } else {
@@ -76,8 +58,35 @@ io.on('connection', socket => {
                 if(err) {
                     socket.emit('arduinoDisconnected', true);
                     console.log('CONECTA ARDUINO');
+                } else {
+                    socket.emit('openedPort', false);
+                    console.log('PUERTO CERRADO');
                 }
             })
         }
     });
+
+    //ENVIO DE DATOS AL ARDUINO
+    // Desde Emisor
+    socket.on('envioDatos', data => {
+        //Se escribe mensaje en el puerto serial hacia el arduino
+        data = `${data}\n`;
+        port.write(Buffer.from(data));
+        console.log(`enviando datos: ${data}`);
+    });
+
+});
+
+
+
+
+
+//RECEPCION DE DATOS DEL ARDUINO
+// Desde Repector 
+port.on('data', data => {
+    // Se reciben datos al puerto y se convierten.
+    const dataString = data.toString();
+    // Se emiten al cliente
+    io.emit('arduino:data', parseInt(dataString));
+    console.log(dataString);
 });
