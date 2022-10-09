@@ -18,6 +18,7 @@ connectButton.addEventListener('click', () => {
     socket.emit('wantOpenPort', false); // Solcitud para cerrar el puerto
   }
 });
+
 // Envía error en caso de que no se pueda abrir o cerrar el puerto
 socket.on('arduinoDisconnected', data => {
   if(data) {
@@ -62,56 +63,22 @@ socket.on('openedPort', data => {
   }
 });
 
+//----------------------------------//
+//----------------------------------//
+//----------------------------------//
+//----------------------------------//
 
 //ENVIO Y RECEPCION DE DATOS
-// Emisor
+// Emisor - El cliente envía datos
 button.addEventListener('click', () => {
   const data = inputText.value + '';
   socket.emit('envioDatos', data);
   console.log(data);
 });
 
-// Receptor
-  // El cliente recibe datos
+// Receptor - El cliente recibe datos
 socket.on('arduino:data', data => {
   // Se imprimen los datos en consola
   console.log(data);
 });
 
-
-
-
-
-
-// const binTable = {
-//   INICIO: ,
-//   FIN:,
-//   a:"0000",
-//   b:,
-//   c:,
-//   d:,
-//   e:,
-//   f:,
-//   g:,
-//   h:,
-//   i:,
-//   j:,
-//   k:,
-//   l:,
-//   m:,
-//   n:,
-//   ñ:,
-//   o:,
-//   p:,
-//   q:,
-//   r:,
-//   s:,
-//   t:,
-//   u:,
-//   v:,
-//   w:,
-//   x:,
-//   y:,
-//   z:,
-  
-// }
