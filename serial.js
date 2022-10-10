@@ -8,6 +8,8 @@ const port = new SerialPort(
     }
 );
 
+port.on('err', () => {console.log('error al abrir el puerto')}); 
+
 //Express - Creando el servidor
 const express = require('express');
 const app = express();
@@ -26,14 +28,6 @@ app.get('/', (req, res) => {
 server.listen(3000, () => {
     console.log("Server running...");
 })
-
-
-// Eventos del puerto Open y error
-// port.on('open', () => {
-//     console.log('Open Serial Port cabronesss');
-// });
-
-port.on('err', () => {console.log('error al abrir el puerto')}); 
 
 
 // Envío y recepción de datos
@@ -77,16 +71,12 @@ io.on('connection', socket => {
 
 });
 
-
-
-
-
 //RECEPCION DE DATOS DEL ARDUINO
 // Desde Repector 
 port.on('data', data => {
     // Se reciben datos al puerto y se convierten.
     const dataString = data.toString();
     // Se emiten al cliente
-    io.emit('arduino:data', parseInt(dataString));
+    io.emit('arduino:data', dataString);
     console.log(dataString);
 });
