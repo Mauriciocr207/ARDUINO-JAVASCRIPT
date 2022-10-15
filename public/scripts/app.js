@@ -3,6 +3,11 @@ const inputText = document.querySelector('#text');
 const button = document.querySelector('#emisorButton');
 const connectButton = document.querySelector('#connect');
 const messageBox = document.querySelector('#messsageBox');
+const textArea = document.querySelector('#textArea');
+let textValuesArray = []; 
+for (let i = 0; i < textArea.rows; i++) {
+  textValuesArray[i] = 0;  
+}
 const socket = io();
 
 
@@ -78,7 +83,15 @@ button.addEventListener('click', () => {
 
 // Receptor - El cliente recibe datos
 socket.on('arduino:data', data => {
+  textValuesArray.push(data.trim());
+  textValuesArray.shift();
   // Se imprimen los datos en consola
-  console.log(data);
+  console.log(textValuesArray);
+  let text = '';
+  for (const i of textValuesArray) {
+    text = text + `${i}\n`;
+  }
+  textArea.textContent = text;
 });
+
 
