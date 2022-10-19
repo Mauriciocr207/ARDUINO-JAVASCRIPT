@@ -6,7 +6,7 @@ const messageBox = document.querySelector('#messsageBox');
 const textArea = document.querySelector('#textArea');
 let textValuesArray = []; 
 for (let i = 0; i < textArea.rows; i++) {
-  textValuesArray[i] = 0;  
+  textValuesArray[i] = '';  
 }
 const socket = io();
 
@@ -93,5 +93,4 @@ socket.on('arduino:data', data => {
   }
   textArea.textContent = text;
 });
-
 

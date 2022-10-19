@@ -34,6 +34,7 @@ server.listen(3000, () => {
     // Conexión de socket
 io.on('connection', socket => { 
     console.log('A new socket conected:' + socket.id);
+    port.isOpen ? port.close() : null;
 
     //Conexión del puerto
     socket.on('wantOpenPort', data => {
@@ -42,7 +43,7 @@ io.on('connection', socket => {
                 if(err) {
                     socket.emit('arduinoDisconnected', true);
                     console.log('CONECTA ARDUINO');
-                } else {
+                } else { 
                     socket.emit('openedPort', true);
                     console.log('PUERTO ABIERTO');
                 }

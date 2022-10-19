@@ -338,6 +338,7 @@ button.ghost {
 
 textarea {
   resize: none;
+  overflow: hidden;
 }
 
 .marginTA{
