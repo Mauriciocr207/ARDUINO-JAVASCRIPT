@@ -77,6 +77,7 @@ io.on('connection', socket => {
 port.on('data', data => {
     // Se reciben datos al puerto y se convierten.
     const dataString = data.toString();
+    
     // Se emiten al cliente
     io.emit('arduino:data', dataString);
     console.log(dataString);
