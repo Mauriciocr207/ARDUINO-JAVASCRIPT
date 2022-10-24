@@ -1,4 +1,4 @@
-// Conexiones con el servidor
+// Constantes
 const inputText = document.querySelector('#text');
 const button = document.querySelector('#emisorButton');
 const connectButton = document.querySelector('#connect');
@@ -18,18 +18,16 @@ const socket = io();
 let wantToOpenPort= false;
 connectButton.addEventListener('click', () => {
   wantToOpenPort = !wantToOpenPort;
-  if(wantToOpenPort) {
-      socket.emit('wantOpenPort', true); // Solicitud para abrir el puerto
-  } else {
-    socket.emit('wantOpenPort', false); // Solcitud para cerrar el puerto
-  }
+  wantToOpenPort ? 
+    socket.emit('wantOpenPort', true) // Solicitud para abrir el puerto 
+    :socket.emit('wantOpenPort', false); // Solcitud para cerrar el puerto  
 });
 
 // Envía error en caso de que no se pueda abrir o cerrar el puerto
-socket.on('arduinoDisconnected', data => {
-  if(data) {
+socket.on('arduinoDisconnected', disconnected => {
+  if(disconnected) {
     console.log('CONECTA TU ARDUINO');
-    connectButton.classList.remove( connectButton.classList[1] );
+    connectButton.classList.remove( connectButton.classList[1] ); // Elimina cualquier clase en la posición 1 del array
 
     let msgErrorNode = document.querySelector('.errorArduinoConnection');
     
@@ -55,10 +53,10 @@ socket.on('arduinoDisconnected', data => {
 });
     
 //Verifica si el puerto se abrió correctamente
-socket.on('openedPort', data => {
+socket.on('openedPort', opened => {
   const classNameAcept = 'connect-acept';
   const classNameDenied = 'connect-denied';
-  if(data) {
+  if(opened) {
     console.log('PUERTO ABIERTO');
     connectButton.classList.add(classNameAcept);
     connectButton.classList.remove(classNameDenied);
@@ -79,14 +77,13 @@ socket.on('openedPort', data => {
 button.addEventListener('click', () => {
   const data = inputText.value + '';
   socket.emit('envioDatos', data);
-  console.log();
 });
 
 // Receptor - El cliente recibe datos
 socket.on('arduino:data', data => {
-  data = data.trim();
-  textValuesArray.push(data);
-  textValuesArray.shift();
+  data = data.trim(); // Se limpia todo espacio del string
+  textValuesArray.push(data); //Se añade data al final del array
+  textValuesArray.shift(); //Se elimina el primer dato del array
   // Se muestran los datos en el textArea
   let textToTextArea = '';
   for (const i of textValuesArray) {
@@ -110,17 +107,17 @@ socket.on('arduino:data', data => {
     //Obtener el caracter Ascii dado un valor decimal
     const toCharData = String.fromCharCode(toIntData);
     
-    const objInfo = {
+    const charInfo = {
         String: i,
         Decimal: AsciiData,
         Binario: binData,
         DecimalBack: toIntData,
         StringBack: toCharData
     }
-    console.table(objInfo);
+    console.table(charInfo);
     console.log(`\n`);
 
-    textToTextArea_Bin = textToTextArea_Bin + ` ${objInfo.Binario.toString()}`;
+    textToTextArea_Bin = textToTextArea_Bin + ` ${charInfo.Binario.toString()}`;
   }
   
   // Se muestra cada string como combinaciones en binario en textAreaBin
