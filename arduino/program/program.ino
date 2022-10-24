@@ -1,8 +1,7 @@
-int counter = 0;
-int led = 13;
-int variable = 0;
+const int led = 13;
+const int potPin = 3;
+int valorVariable = 0;
 String cadena;
-
 
 void setup() {
   pinMode(led,OUTPUT);
@@ -10,25 +9,29 @@ void setup() {
 }
 
 void loop() {
-  //Se lee el serial
+  //Se lee el serial si hay un dato disponible
   if(Serial.available()>0){
     cadena = Serial.readStringUntil('\n');
     cadena = cadena.substring(0, cadena.length());
-  }
-
-  if(cadena != "") {
-    if(cadena == "H") {
-      digitalWrite(led, HIGH);
-    } 
-    else if(cadena == "L") {
-      digitalWrite(led, LOW);
+    if(cadena != "") {
+      if(cadena == "H") {
+        digitalWrite(led, HIGH);
+      } 
+      else if(cadena == "L") {
+        digitalWrite(led, LOW);
+      }
+      Serial.println(cadena);
+      delay(1000);
+      cadena = "";
+      }
     }
-    Serial.print("RECIBI DATOS: ");
-    Serial.println(cadena);
-    delay(3000);
-    cadena = "";
+  
+  //Envio de datos
+  int val = analogRead(potPin);
+  if( !(val < (valorVariable + 10) && val > (valorVariable - 10)) ){
+    Serial.println(val);
+    valorVariable = val;
   }
-  Serial.println(counter);
-  counter++;
-  delay(1000);
+  
+  delay(20);
 }

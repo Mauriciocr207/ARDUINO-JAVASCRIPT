@@ -8,6 +8,7 @@ let textValuesArray = [];
 for (let i = 0; i < textArea.rows; i++) {
   textValuesArray[i] = '';  
 }
+const textAreaBin = document.querySelector('#textArea-Bin');
 const socket = io();
 
 
@@ -78,19 +79,51 @@ socket.on('openedPort', data => {
 button.addEventListener('click', () => {
   const data = inputText.value + '';
   socket.emit('envioDatos', data);
-  console.log(data);
+  console.log();
 });
 
 // Receptor - El cliente recibe datos
 socket.on('arduino:data', data => {
-  textValuesArray.push(data.trim());
+  data = data.trim();
+  textValuesArray.push(data);
   textValuesArray.shift();
-  // Se imprimen los datos en consola
-  console.log(textValuesArray);
-  let text = '';
+  // Se muestran los datos en el textArea
+  let textToTextArea = '';
   for (const i of textValuesArray) {
-    text = text + `${i}\n`;
+    textToTextArea = textToTextArea + `${i}\n`;
   }
-  textArea.textContent = text;
-});
+  textArea.textContent = textToTextArea;
 
+  // Se imprime en consola las conversiones de cada char del string
+  console.log(`Valor: ${data}`);
+  let textToTextArea_Bin = '';
+  for (const i of data) { //data es un string
+    //Obtener valor Ascii del char
+    const AsciiData = i.charCodeAt();
+
+    //Cambiar un decimal a binario
+    const binData = AsciiData.toString(2);
+    
+    //Cambiar un binario a un decimal
+    const toIntData = parseInt(binData,2);
+    
+    //Obtener el caracter Ascii dado un valor decimal
+    const toCharData = String.fromCharCode(toIntData);
+    
+    const objInfo = {
+        String: i,
+        Decimal: AsciiData,
+        Binario: binData,
+        DecimalBack: toIntData,
+        StringBack: toCharData
+    }
+    console.table(objInfo);
+    console.log(`\n`);
+
+    textToTextArea_Bin = textToTextArea_Bin + ` ${objInfo.Binario.toString()}`;
+  }
+  
+  // Se muestra cada string como combinaciones en binario en textAreaBin
+  textAreaBin.textContent = textToTextArea_Bin;
+
+});

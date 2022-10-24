@@ -339,6 +339,11 @@ button.ghost {
 textarea {
   resize: none;
   overflow: hidden;
+  font-size: 10px;
+}
+
+#textArea-Bin {
+  font-size: 15px;
 }
 
 .marginTA{
