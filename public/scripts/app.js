@@ -9,11 +9,26 @@ for (let i = 0; i < textArea.rows; i++) {
   textValuesArray[i] = '';  
 }
 const textAreaBin = document.querySelector('#textArea-Bin');
+const btnPort = document.querySelector('#sendPort');
+const numberPort = document.querySelector('#numberPort');
+const comSelection = document.querySelector('.COMselection');
 const socket = io();
 
 
-
 // CONEXIÓN CON EL PUERTO SERIAL
+// Envía el valor numérico del puerto
+numberPort.addEventListener('input', () => {
+  comSelection.classList.remove('portAcepted');
+  comSelection.classList.add('portDenied');
+});
+btnPort.addEventListener('click', () => {
+  comSelection.classList.remove('portDenied');
+  comSelection.classList.add('portAcepted');
+  const namePort = `COM${numberPort.value}`;
+  socket.emit('port', namePort); // Se envia el nombre del puerto
+  console.log(namePort);
+});
+
 // Envía la señal para abrir o cerrar el puerto serial
 let wantToOpenPort= false;
 connectButton.addEventListener('click', () => {
@@ -75,8 +90,9 @@ socket.on('openedPort', opened => {
 //ENVIO Y RECEPCION DE DATOS
 // Emisor - El cliente envía datos
 button.addEventListener('click', () => {
-  const data = inputText.value + '';
+  const data = inputText.value;
   socket.emit('envioDatos', data);
+  inputText.value = '';
 });
 
 // Receptor - El cliente recibe datos

@@ -11,6 +11,15 @@
 </head>
 
 <body>
+    <div class="selectionPort">
+        <!-- extra clases: portAcepted portDenied -->
+        <div class="COMselection"> 
+            <div>COM:</div>
+            <input type="number"value="1" min="1" max="10" class="input inputCOM" id="numberPort">
+        </div>
+        <button id="sendPort" class="sendPort">Enviar</button>
+    </div>
+
     <div class="container" id="container">
         <!-- Botón de conexión con arduino -->
         <div class="connect" id="connect">
@@ -131,12 +140,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="scripts/script.js"></script>
     <script type="module" src="scripts/app.js"></script>
-    <script type="module" src="scripts/app2.js"></script>
 
-    <!-- Error en la conexión con arduino -->
-    <!-- <div class="errorArduinoConnection">
-        <strong>CONECTA TU ARDUINO</strong>
-    </div> -->
 </body>
 
 </html>

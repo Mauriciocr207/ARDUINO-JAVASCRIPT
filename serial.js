@@ -1,15 +1,3 @@
-// Conexión Serial
-const {SerialPort, SerialPortMock} = require('serialport');
-const port = new SerialPort(
-    {
-        path: 'COM6',
-        baudRate: 9600,
-        autoOpen: false
-    }
-);
-
-port.on('err', () => {console.log('error al abrir el puerto')}); 
-
 //Express - Creando el servidor
 const express = require('express');
 const app = express();
@@ -27,7 +15,19 @@ app.get('/', (req, res) => {
 // Configuración del servidor
 server.listen(3000, () => {
     console.log("Server running...");
-})
+});
+
+
+// Conexión Serial
+const {SerialPort, SerialPortMock} = require('serialport');
+let port = new SerialPort(
+    {
+        path: 'COM1',
+        baudRate: 9600,
+        autoOpen: false
+    }
+);
+port.on('err', () => {console.log('error al abrir el puerto')}); 
 
 
 // Envío y recepción de datos
@@ -35,10 +35,22 @@ server.listen(3000, () => {
 io.on('connection', socket => { 
     console.log('A new socket conected:' + socket.id);
     port.isOpen ? port.close() : null;
-
+    
+    // Se recibe el nombre del puerto
+    socket.on('port', portValue => {
+        port = new SerialPort(
+            {
+                path: portValue,
+                baudRate: 9600,
+                autoOpen: false
+            }
+        );
+        console.log(port.path);
+    });
+       
     //Conexión del puerto
-    socket.on('wantOpenPort', data => {
-        if(data) {
+    socket.on('wantOpenPort', theWant => {
+        if(theWant) {
             port.open(function (err) { 
                 if(err) {
                     socket.emit('arduinoDisconnected', true);
@@ -69,14 +81,14 @@ io.on('connection', socket => {
         port.write(Buffer.from(data));
         console.log(`enviando datos: ${data}`);
     });
-
+    
 });
 
 //RECEPCION DE DATOS DEL ARDUINO
 // Desde Repector 
 port.on('data', data => {
     // Se reciben datos al puerto y se convierten.
-    const dataString = data.toString();
+    const dataString = data.toString(); 
     
     // Se emiten al cliente
     io.emit('arduino:data', dataString);
