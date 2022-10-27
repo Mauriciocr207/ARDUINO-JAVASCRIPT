@@ -31,7 +31,7 @@ port.on('err', () => {console.log('error al abrir el puerto')});
 
 
 // Envío y recepción de datos
-    // Conexión de socket
+// Conexión de socket
 io.on('connection', socket => { 
     console.log('A new socket conected:' + socket.id);
     port.isOpen ? port.close() : null;
@@ -74,7 +74,7 @@ io.on('connection', socket => {
     });
 
     //ENVIO DE DATOS AL ARDUINO
-    // Desde Emisor
+    // arduino <- servidor <- cliente
     socket.on('envioDatos', data => {
         //Se escribe mensaje en el puerto serial hacia el arduino
         data = `${data}\n`;
@@ -85,7 +85,7 @@ io.on('connection', socket => {
 });
 
 //RECEPCION DE DATOS DEL ARDUINO
-// Desde Repector 
+// arduino -> servidor -> cliente
 port.on('data', data => {
     // Se reciben datos al puerto y se convierten.
     const dataString = data.toString(); 
