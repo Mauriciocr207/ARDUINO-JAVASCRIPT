@@ -81,7 +81,7 @@ io.on('connection', socket => {
         port.write(Buffer.from(data));
         console.log(`enviando datos: ${data}`);
     });
-    
+
 });
 
 //RECEPCION DE DATOS DEL ARDUINO
@@ -93,4 +93,5 @@ port.on('data', data => {
     // Se emiten al cliente
     io.emit('arduino:data', dataString);
     console.log(dataString);
+
 });

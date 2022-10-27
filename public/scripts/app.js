@@ -20,11 +20,12 @@ const socket = io();
 numberPort.addEventListener('input', () => {
   comSelection.classList.remove('portAcepted');
   comSelection.classList.add('portDenied');
+  socket.emit('wantOpenPort', false);
 });
 btnPort.addEventListener('click', () => {
   comSelection.classList.remove('portDenied');
   comSelection.classList.add('portAcepted');
-  const namePort = `COM${numberPort.value}`;
+  const namePort = `COM${numberPort.value}`
   socket.emit('port', namePort); // Se envia el nombre del puerto
   console.log(namePort);
 });
@@ -67,6 +68,7 @@ socket.on('arduinoDisconnected', disconnected => {
   };
 });
     
+
 //Verifica si el puerto se abrió correctamente
 socket.on('openedPort', opened => {
   const classNameAcept = 'connect-acept';
