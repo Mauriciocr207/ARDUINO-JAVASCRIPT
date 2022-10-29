@@ -38,6 +38,7 @@ io.on('connection', socket => {
     
     // Se recibe el nombre del puerto
     socket.on('port', portValue => {
+        // Se crea el puerto y los eventos del puerto.
         port = new SerialPort(
             {
                 path: portValue,
@@ -46,6 +47,18 @@ io.on('connection', socket => {
             }
         );
         console.log(port.path);
+
+        //RECEPCION DE DATOS DEL ARDUINO
+        // arduino -> servidor -> cliente
+        port.on('data', data => {
+            // Se reciben datos al puerto y se convierten.
+            const dataString = data.toString(); 
+            
+            // Se emiten al cliente
+            io.emit('arduino:data', dataString);
+            console.log(dataString);
+
+        });
     });
        
     //Conexión del puerto
@@ -86,12 +99,12 @@ io.on('connection', socket => {
 
 //RECEPCION DE DATOS DEL ARDUINO
 // arduino -> servidor -> cliente
-port.on('data', data => {
-    // Se reciben datos al puerto y se convierten.
-    const dataString = data.toString(); 
+// port.on('data', data => {
+//     // Se reciben datos al puerto y se convierten.
+//     const dataString = data.toString(); 
     
-    // Se emiten al cliente
-    io.emit('arduino:data', dataString);
-    console.log(dataString);
+//     // Se emiten al cliente
+//     io.emit('arduino:data', dataString);
+//     console.log(dataString);
 
-});
+// });

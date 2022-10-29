@@ -3,6 +3,7 @@ const int potPin = 3;
 int valorVariable = 0;
 String cadena;
 
+
 void setup() {
   pinMode(led,OUTPUT);
   Serial.begin(9600);
@@ -32,6 +33,5 @@ void loop() {
     Serial.println(val);
     valorVariable = val;
   }
-  
   delay(20);
 }
