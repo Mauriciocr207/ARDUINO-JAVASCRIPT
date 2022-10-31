@@ -20,7 +20,7 @@ const socket = io();
 numberPort.addEventListener('input', () => {
   comSelection.classList.remove('portAcepted');
   comSelection.classList.add('portDenied');
-  socket.emit('wantOpenPort', false);
+  socket.emit('wantOpenPort', false); // Solicitud para cerrar el puerto
 });
 btnPort.addEventListener('click', () => {
   comSelection.classList.remove('portDenied');

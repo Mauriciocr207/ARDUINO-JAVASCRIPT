@@ -97,14 +97,14 @@ io.on('connection', socket => {
 
 });
 
-//RECEPCION DE DATOS DEL ARDUINO
+// RECEPCION DE DATOS DEL ARDUINO
 // arduino -> servidor -> cliente
-// port.on('data', data => {
-//     // Se reciben datos al puerto y se convierten.
-//     const dataString = data.toString(); 
+port.on('data', data => {
+    // Se reciben datos al puerto y se convierten.
+    const dataString = data.toString(); 
     
-//     // Se emiten al cliente
-//     io.emit('arduino:data', dataString);
-//     console.log(dataString);
+    // Se emiten al cliente
+    io.emit('arduino:data', dataString);
+    console.log(dataString);
 
-// });
+});
