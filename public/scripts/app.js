@@ -55,6 +55,7 @@ socket.on('arduinoDisconnected', disconnected => {
       msgErrorNode.appendChild(msgErrChildNode);
       msgErrChildNode.textContent = "CONECTA TU ARDUINO"
       msgErrorNode.classList.add('errorArduinoConnection');
+
       setTimeout(() => {
         msgErrorNode.style.opacity = '1';
       }, 200);
@@ -64,6 +65,9 @@ socket.on('arduinoDisconnected', disconnected => {
       setTimeout(() => {
         msgErrorNode.remove();
       }, 3000);
+
+      return 
+
     }
   };
 });
