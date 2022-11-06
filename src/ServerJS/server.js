@@ -40,7 +40,7 @@ function pythonProcessToBin(input) {
   python_processBin.stdout.on("data", (data) => {
     const newData = JSON.parse(data)["text__messageBinary"];
     port.write(newData);
-    console.log(newData);
+    console.log("Mensaje enviado a arduino: ", newData);
   });
 }
 function pythonProcessToString(input) {
@@ -55,7 +55,7 @@ function pythonProcessToString(input) {
     mensaje = newData["text__message"];
     input = newData["input"];
     ioJS.emit("arduino:data", mensaje, input);
-    console.log("mensaje: ", input);
+    console.log("mensaje desde arduino: ", mensaje);
   });
 }
 
