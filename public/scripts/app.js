@@ -102,7 +102,7 @@ button.addEventListener('click', () => {
 });
 
 // Receptor - El cliente recibe datos
-socket.on('arduino:data', data => {
+socket.on('arduino:data', (data, binaryData) => {
   data = data.trim(); // Se limpia todo espacio del string
   textValuesArray.push(data); //Se añade data al final del array
   textValuesArray.shift(); //Se elimina el primer dato del array
@@ -112,37 +112,8 @@ socket.on('arduino:data', data => {
     textToTextArea = textToTextArea + `${i}\n`;
   }
   textArea.textContent = textToTextArea;
-
-  // Se imprime en consola las conversiones de cada char del string
-  console.log(`Valor: ${data}`);
-  let textToTextArea_Bin = '';
-  for (const i of data) { //data es un string
-    //Obtener valor Ascii del char
-    const AsciiData = i.charCodeAt();
-
-    //Cambiar un decimal a binario
-    const binData = AsciiData.toString(2);
-    
-    //Cambiar un binario a un decimal
-    const toIntData = parseInt(binData,2);
-    
-    //Obtener el caracter Ascii dado un valor decimal
-    const toCharData = String.fromCharCode(toIntData);
-    
-    const charInfo = {
-        String: i,
-        Decimal: AsciiData,
-        Binario: binData,
-        DecimalBack: toIntData,
-        StringBack: toCharData
-    }
-    console.table(charInfo);
-    console.log(`\n`);
-
-    textToTextArea_Bin = textToTextArea_Bin + ` ${charInfo.Binario.toString()}`;
-  }
   
   // Se muestra cada string como combinaciones en binario en textAreaBin
-  textAreaBin.textContent = textToTextArea_Bin;
+  textAreaBin.textContent = binaryData;
 
 });

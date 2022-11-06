@@ -1,3 +1,4 @@
+const spawner = require('child_process').spawn;
 //Express - Creando el servidor
 const express = require('express');
 const { createServer } = require('http');
@@ -14,30 +15,63 @@ serverJS.listen(65000, () => {
 });
 
 // Envío de documento al navegador
+const arrayDirName = __dirname.split("\\");
+arrayDirName.pop();
+const __dirName = arrayDirName.join("\\"); // directorio 'src'
+arrayDirName.pop();
+const __proyectName = arrayDirName.join("\\"); // directorio raiz del proyecto
 (function() {
-    const arrayDirName = __dirname.split("\\");
-    arrayDirName.pop();
-    arrayDirName.pop();
-    const __dirName = arrayDirName.join("\\");
-    console.log(__dirName);
-
-    app.use(express.static(__dirName + '/public'));
+    app.use(express.static(__proyectName + '/public'));
     app.get('/', (req, res) => {
-        res.sendFile(__dirName + '/public/index.html');
+        res.sendFile(__proyectName + '/public/index.html');
     });
 })();
 
 
+//Procesamiento de los datos con Python
+let python_processBin; // varibale donde se guardará la salida de datos a binario
+let python_processString; // variable donde se guardará la entrada de datos en string
+function pythonProcessToBin(input) {
+    const pyDirection = __dirName + '/venv/src/toBin.py';
+    const Data = {
+        input
+    }
+    python_processBin = spawner('python',[ pyDirection, JSON.stringify(Data) ]);
+
+    python_processBin.stdout.on('data', data => {
+        const newData = (JSON.parse(data))["text__messageBinary"];
+        port.write(newData);
+        console.log(newData);
+    });
+};
+function pythonProcessToString(input) {
+    const pyDirection = __dirName + '/venv/src/toString.py';
+    const Data = {
+        input
+    }
+    python_processString = spawner('python',[ pyDirection, JSON.stringify(Data) ]);
+
+    python_processString.stdout.on('data', data => {
+        const newData = JSON.parse(data);
+        mensaje = newData["text__message"];
+        input = newData["input"];
+        ioJS.emit('arduino:data', mensaje, input);
+        console.log("mensaje: ", input);
+    });
+}
+
+
 // Conexión Serial
 const { SerialPort } = require('serialport');
-let port; // variable global para el puerto
+let port = {}; // variable global para el puerto
+let message = '';
 function createSerialPort(portValue) {
     // Se crea el puerto y los eventos del puerto.
     port = new SerialPort(
         {
             path: portValue,
             baudRate: 9600,
-            autoOpen: false
+            autoOpen: false,
         }
     );
     console.log(`Port created on: ${port.path}`);
@@ -45,19 +79,13 @@ function createSerialPort(portValue) {
     //RECEPCION DE DATOS DEL ARDUINO
     // arduino -> servidor -> cliente
     port.on('data', data => {
-        // Se reciben datos al puerto y se convierten.
         const dataString = data.toString();
-
-        // Se emiten al cliente
-        io.emit('arduino:data', dataString);
-        console.log(dataString);
-
+        pythonProcessToString(dataString);
     });
 
     port.on('err', () => {console.log('error al abrir el puerto')});
 }
 createSerialPort('COM1'); // Se inicializa el puerto en el COM1
-
 
 
 // Envío y recepción de datos
@@ -101,11 +129,10 @@ ioJS.on('connection', client => {
     //ENVIO DE DATOS AL ARDUINO
     // arduino <- servidor <- cliente
     client.on('envioDatos', data => {
-        //Se escribe mensaje en el puerto serial hacia el arduino
-        data = `${data}\n`;
-        port.write(Buffer.from(data));
-        console.log(`enviando datos: ${data}`);
+        pythonProcessToBin(data);
     });
 });
+
+
 
 
