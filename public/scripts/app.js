@@ -8,7 +8,6 @@ let textValuesArray = [];
 for (let i = 0; i < textArea.rows; i++) {
   textValuesArray[i] = "";
 }
-const textAreaBin = document.querySelector("#textArea-Bin");
 const btnPort = document.querySelector("#sendPort");
 const numberPort = document.querySelector("#numberPort");
 const comSelection = document.querySelector(".COMselection");
@@ -99,7 +98,7 @@ button.addEventListener("click", () => {
 });
 
 // Receptor - El cliente recibe datos
-socket.on("arduino:data", (data, binaryData) => {
+socket.on("arduino:data", (data) => {
   data = data.trim(); // Se limpia todo espacio del string
   textValuesArray.push(data); //Se añade data al final del array
   textValuesArray.shift(); //Se elimina el primer dato del array
@@ -109,7 +108,4 @@ socket.on("arduino:data", (data, binaryData) => {
     textToTextArea = textToTextArea + `${i}\n`;
   }
   textArea.textContent = textToTextArea;
-
-  // Se muestra cada string como combinaciones en binario en textAreaBin
-  textAreaBin.textContent = binaryData;
 });

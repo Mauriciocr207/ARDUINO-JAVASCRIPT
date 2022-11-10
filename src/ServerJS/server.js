@@ -30,7 +30,7 @@ const __proyectName = arrayDirName.join("\\"); // directorio raiz del proyecto
 //Procesamiento de los datos con Python
 let python_processBin; // varibale donde se guardará la salida de datos a binario
 let python_processString; // variable donde se guardará la entrada de datos en string
-function pythonProcessToBin(input) {
+function pythonProcessDataToSend(input) {
   const pyDirection = __dirName + "/venv/src/toBin.py";
   const Data = {
     input,
@@ -43,7 +43,7 @@ function pythonProcessToBin(input) {
     console.log("Mensaje enviado a arduino: ", newData);
   });
 }
-function pythonProcessToString(input) {
+function pythonProcessDataReceived(input) {
   const pyDirection = __dirName + "/venv/src/toString.py";
   const Data = {
     input,
@@ -54,15 +54,18 @@ function pythonProcessToString(input) {
     const newData = JSON.parse(data);
     mensaje = newData["text__message"];
     input = newData["input"];
-    ioJS.emit("arduino:data", mensaje, input);
     console.log("mensaje desde arduino: ", mensaje);
+    return {
+      "mensaje": mensaje,
+      "input": input
+    }
   });
 }
 
 // Conexión Serial
-const { SerialPort } = require("serialport");
+const { SerialPort, DelimiterParser } = require("serialport");
 let port = {}; // variable global para el puerto
-let message = "";
+let parse = {}; // variable gloabl donde se guarda el parser
 function createSerialPort(portValue) {
   // Se crea el puerto y los eventos del puerto.
   port = new SerialPort({
@@ -74,9 +77,11 @@ function createSerialPort(portValue) {
 
   //RECEPCION DE DATOS DEL ARDUINO
   // arduino -> servidor -> cliente
-  port.on("data", (data) => {
-    const dataString = data.toString();
-    pythonProcessToString(dataString);
+  parse = port.pipe(new DelimiterParser({ delimiter: '\n' }));
+  parse.on("data", data => {
+    const dataString = data.toString('utf8');
+    console.log(data);
+    ioJS.emit("arduino:data", dataString );
   });
 
   port.on("err", () => {
@@ -126,6 +131,6 @@ ioJS.on("connection", (client) => {
   //ENVIO DE DATOS AL ARDUINO
   // arduino <- servidor <- cliente
   client.on("envioDatos", (data) => {
-    pythonProcessToBin(data);
+    port.write(Buffer.from(data));
   });
 });

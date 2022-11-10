@@ -31,7 +31,7 @@ void loop()
           Cadena = binCadena.substring(1, 9);
           binCadena = binCadena.substring(9, binCadena.length());
         }
-        // Serial.println(Cadena);
+        Serial.println(Cadena);
         delay(20);
       }
     }
