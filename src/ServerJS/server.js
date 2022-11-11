@@ -27,40 +27,6 @@ const __proyectName = arrayDirName.join("\\"); // directorio raiz del proyecto
   });
 })();
 
-//Procesamiento de los datos con Python
-let python_processBin; // varibale donde se guardará la salida de datos a binario
-let python_processString; // variable donde se guardará la entrada de datos en string
-function pythonProcessDataToSend(input) {
-  const pyDirection = __dirName + "/venv/src/toBin.py";
-  const Data = {
-    input,
-  };
-  python_processBin = spawner("python", [pyDirection, JSON.stringify(Data)]);
-
-  python_processBin.stdout.on("data", (data) => {
-    const newData = JSON.parse(data)["text__messageBinary"];
-    port.write(newData);
-    console.log("Mensaje enviado a arduino: ", newData);
-  });
-}
-function pythonProcessDataReceived(input) {
-  const pyDirection = __dirName + "/venv/src/toString.py";
-  const Data = {
-    input,
-  };
-  python_processString = spawner("python", [pyDirection, JSON.stringify(Data)]);
-
-  python_processString.stdout.on("data", (data) => {
-    const newData = JSON.parse(data);
-    mensaje = newData["text__message"];
-    input = newData["input"];
-    console.log("mensaje desde arduino: ", mensaje);
-    return {
-      "mensaje": mensaje,
-      "input": input
-    }
-  });
-}
 
 // Conexión Serial
 const { SerialPort, DelimiterParser } = require("serialport");
