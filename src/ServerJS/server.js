@@ -31,7 +31,7 @@ const __proyectName = arrayDirName.join("\\"); // directorio raiz del proyecto
 // Conexión Serial
 const { SerialPort, DelimiterParser } = require("serialport");
 let port = {}; // variable global para el puerto
-let parse = {}; // variable gloabl donde se guarda el parser
+let parse = {}; // variable global donde se guarda el parser
 function createSerialPort(portValue) {
   // Se crea el puerto y los eventos del puerto.
   port = new SerialPort({

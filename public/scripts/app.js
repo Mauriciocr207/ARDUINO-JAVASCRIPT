@@ -32,9 +32,9 @@ btnPort.addEventListener("click", () => {
 let wantToOpenPort = false;
 connectButton.addEventListener("click", () => {
   wantToOpenPort = !wantToOpenPort;
-  wantToOpenPort
-    ? socket.emit("wantOpenPort", true) // Solicitud para abrir el puerto
-    : socket.emit("wantOpenPort", false); // Solcitud para cerrar el puerto
+  wantToOpenPort ? 
+    socket.emit("wantOpenPort", true) : // Solicitud para abrir el puerto
+    socket.emit("wantOpenPort", false); // Solcitud para cerrar el puerto
 });
 
 // Envía error en caso de que no se pueda abrir o cerrar el puerto
