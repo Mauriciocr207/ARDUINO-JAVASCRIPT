@@ -1,4 +1,3 @@
-const spawner = require("child_process").spawn;
 //Express - Creando el servidor
 const express = require("express");
 const { createServer } = require("http");
