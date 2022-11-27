@@ -4,10 +4,6 @@ const button = document.querySelector("#emisorButton");
 const connectButton = document.querySelector("#connect");
 const messageBox = document.querySelector("#messsageBox");
 const textArea = document.querySelector("#textArea");
-let textValuesArray = [];
-for (let i = 0; i < textArea.rows; i++) {
-  textValuesArray[i] = "";
-}
 const btnPort = document.querySelector("#sendPort");
 const numberPort = document.querySelector("#numberPort");
 const comSelection = document.querySelector(".COMselection");
@@ -98,6 +94,10 @@ button.addEventListener("click", () => {
 });
 
 // Receptor - El cliente recibe datos
+let textValuesArray = [];
+for (let i = 0; i < textArea.rows; i++) {
+  textValuesArray[i] = "";
+}
 socket.on("arduino:data", (data) => {
   data = data.trim(); // Se limpia todo espacio del string
   textValuesArray.push(data); //Se añade data al final del array
