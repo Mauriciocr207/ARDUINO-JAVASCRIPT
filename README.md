@@ -7,6 +7,7 @@ This proyect was made with libraries like express to create a server; socket.io 
 <div style= 
     "display:flex;
     flex-direction: row;
+    justify-content: center;
     gap:5px;
     margin: 0 0 10px">
     <img src="images/express.js.png" style= 
