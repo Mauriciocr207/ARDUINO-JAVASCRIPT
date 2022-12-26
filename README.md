@@ -13,4 +13,4 @@ This proyect was made with libraries like express to create a server; socket.io 
 
 # Work - flow
 
-<img src="images/1.png" style= "border-radius: 20px; background-color: white;">
+<img src="images/1.png" style= "width: 600px;">
